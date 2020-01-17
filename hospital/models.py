@@ -46,9 +46,11 @@ class Medicine(models.Model):
 class Appointment(models.Model):
     patient = models.ForeignKey('user.Patient', on_delete=models.CASCADE)
     disease = models.TextField()
+    reviewed = models.BooleanField(default=False)
     status = models.BooleanField(default=False)
+    complete = models.BooleanField(default=False)
     assigned_doctor = models.ForeignKey('user.Doctor', null=True, blank=True, on_delete=models.SET_NULL)
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
-
+    
     def __str__(self):
         return self.patient.user.username+'\'s appointment to Dr.'+ self.hospital.name

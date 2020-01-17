@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Appointment
 from user.serializers import *
+from user.models import Patient, Doctor
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
@@ -12,7 +13,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        print("In Create")
+        print("In Create    ")
         patient_id = validated_data.pop('patient')
         patient = Patient.objects.get(id=patient_id) 
         appointment = Appointment.objects.create(patient = patient, **validated_data)
