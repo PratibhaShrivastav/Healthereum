@@ -29,7 +29,7 @@ class Doctor(models.Model):
     address = models.TextField()
     pincode = models.CharField(max_length=6)
     city = models.ForeignKey('hospital.City', on_delete=models.CASCADE)
-    skills = models.ForeignKey(Specialization, on_delete=models.SET_NULL, null=True)
+    skills = models.ManyToManyField(Specialization)
     hospital = models.ForeignKey('hospital.Hospital', on_delete=models.CASCADE)
     
     # @receiver(post_save, sender=User)
