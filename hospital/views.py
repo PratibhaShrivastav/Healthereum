@@ -2,56 +2,52 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import *
-from user.models import Patient, Doctor
-from . import serializers
+from . import models as hospital_model
+from . import serializers as hospital_serializers
+from user import models as user_models
 from django.db.models import Q
+import pdb
 
 
 class HospitalSearchView(APIView):
-
 	def post(self,request,format=None):
 		search_text = request.data["search_text"]
-		hospital = Hospital.objects.filter(Q(name__icontains = search_text) | Q(city__city__icontains = search_text))
-		hospital = serializers.HospitalSerializer(hospital,many=True)
+		hospital = hospital_model.Hospital.objects.filter(Q(name__icontains = search_text) | Q(city__city__icontains = search_text))
+		hospital = hospital_serializers.HospitalSerializer(hospital,many=True)
 
 		return Response(hospital.data, status.HTTP_200_OK)
 
-# class HospitalView(APIView):
+class HospitalView(APIView):
 
-#     def post(self, request, format=None):
+    def post(self, request, format=None):
         
-#         unique_id = request.data.get("unique_id")
-#         user = request.healthy_user
-#         bio = request.data.get("bio", None)
-#         email = request.data.get("email", None)
-#         contact = request.data.get("contact")
-#         fax_number = request.data.get("fax_number", None)
-#         address = request.data.get("address")
-#         pincode = request.data.get("pincode")
-#         website = request.data.get("website", None)
-#         city = request.data.get("city")
+        unique_id = request.data.get("unique_id")
+        user = request.healthy_user
+        bio = request.data.get("bio", None)
+        email = request.data.get("email", None)
+        contact = request.data.get("contact")
+        fax_number = request.data.get("fax_number", None)
+        address = request.data.get("address")
+        pincode = request.data.get("pincode")
+        website = request.data.get("website", None)
+        city = request.data.get("city")
         
-#         city_obj = City.objects.get(city=city)
+        city_obj = hospital_model.City.objects.get(city=city)
 
-#         hospital = Hospital.objects.create(unique_id=unique_id, user=user, bio=bio, email=email, contact=contact,
-#                 fax_number=fax_number, address=address, pincode=pincode, website=website, city=city_obj)
+        hospital = hospital_model.Hospital.objects.create(unique_id=unique_id, user=user, bio=bio, email=email, contact=contact,
+                fax_number=fax_number, address=address, pincode=pincode, website=website, city=city_obj)
         
-#         hospital = HospitalSerializer(hospital)
+        hospital = hospital_serializers.HospitalSerializer(hospital)
 
 
-#         return Response(hospital.data)
+        return Response(hospital.data)
 
-#     def get(self, request, format=None):
-
-#         hospital = Hospital.objects.get(id=1)
-#         # hospital = request.healthy_user.hospital
-#         print(hospital)
-#         # print("\n\n\n\n\n")
-#         hospital = HospitalSerializer(hospital)
-#         print(hospital)
+    def get(self, request, format=None):
+        hospital = hospital_model.Hospital.objects.get(id=1)
+        hospital = hospital_serializers.HospitalSerializer(hospital)
+        print(hospital.data)
         
-#         return Response("Done")
+        return Response("Done")
 
 
 class Appointments(APIView):
@@ -63,8 +59,9 @@ class Appointments(APIView):
         """
         Get List of all pending appointments
         """
-        appointments = Appointment.objects.filter(reviewed=False)
-        appointments = serializers.AppointmentSerializer(appointments, many=True)
+        hospital = request.healthy_user
+        appointments = hospital_model.Appointment.objects.filter(hospital=hospital, reviewed=False)
+        appointments = hospital_serializers.AppointmentSerializer(appointments, many=True)
         
         return Response(appointments.data, status.HTTP_200_OK)
 
@@ -84,7 +81,7 @@ class Appointments(APIView):
             new_status = request.data.pop('status')
 
         if 'assigned_doctor' in request.data and new_status:
-            doctor = Doctor.objects.get(id=request.data.pop('assigned_doctor'))
+            doctor = user_models.Doctor.objects.get(id=request.data.pop('assigned_doctor'))
         else:
             doctor = None
         
@@ -93,14 +90,14 @@ class Appointments(APIView):
         else:
             complete = False
         
-        appointment = Appointment.objects.get(id=object_id)
+        appointment = hospital_model.Appointment.objects.get(id=object_id)
         
         appointment.reviewed = True
         appointment.complete = complete
         appointment.assigned_doctor = doctor
         appointment.status = new_status
         appointment.save()
-        appointment = serializers.AppointmentSerializer(appointment)
+        appointment = hospital_serializers.AppointmentSerializer(appointment)
         
         return Response(appointment.data, status.HTTP_200_OK)
 
@@ -121,14 +118,14 @@ class Appointments(APIView):
         else:
             disease = 'N/A'
         
-        hospital = Hospital.objects.get(id=hospital)
+        hospital = hospital_model.Hospital.objects.get(id=hospital)
 
         try:
-            appointment = Appointment.objects.create(patient=request.healthy_user, hospital=hospital, disease=disease)
+            appointment = hospital_model.Appointment.objects.create(patient=request.healthy_user, hospital=hospital, disease=disease)
         except:
             return Response({'detail':'There was some error creating appointment or the appointment already exists'},
                                  status.HTTP_503_SERVICE_UNAVAILABLE)
         
-        appointment = serializers.AppointmentSerializer(appointment)
+        appointment = hospital_serializers.AppointmentSerializer(appointment)
         
         return Response(appointment.data, status.HTTP_200_OK)

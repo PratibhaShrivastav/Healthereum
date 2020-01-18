@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import Doctor,Patient
 from hospital.models import Hospital
-from .serializers import *
+from . import serializers
 from hospital.serializers import HospitalSerializer
 
 
@@ -31,8 +31,8 @@ class RegisterView(APIView):
 
 				token, created = Token.objects.get_or_create(user=user)
 
-				userData = UserSerializer(user)
-				tokenData = TokenSerializer(token)
+				userData = serializers.UserSerializer(user)
+				tokenData = serializers.TokenSerializer(token)
 
 				return Response({"user":userData.data,"token":tokenData.data}, status=status.HTTP_200_OK)
 			except:
@@ -54,7 +54,7 @@ class LoginView(APIView):
 		user = authenticate(username=username,password=password)
 
 		token, created = Token.objects.get_or_create(user=user)
-		tokenData = TokenSerializer(token)
+		tokenData = serializers.TokenSerializer(token)
 
 		return Response(tokenData.data)
 

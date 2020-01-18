@@ -5,5 +5,5 @@ from .views import *
 urlpatterns = [
     path('appointments/', Appointments.as_view()),   
     path('',HospitalSearchView.as_view()),
-    # path('profile/',HospitalView.as_view()),
+    path('profile/',HospitalView.as_view()),
 ]

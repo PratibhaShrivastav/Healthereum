@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from .serializers import *
 
 
 def hospital_profile_pic_path(instance, filename):
@@ -15,14 +14,14 @@ class State(models.Model):
 
 class City(models.Model):
     city = models.CharField(max_length=40)
-    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='cities')
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.city+' ('+self.state.state+')'
 
 class Hospital(models.Model):
     unique_id = models.CharField(max_length=50, unique=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='hospital')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     bio = models.TextField(null=True, blank=True)
     cover_pic = models.ImageField(upload_to=hospital_profile_pic_path, null=True, blank=True)
@@ -32,10 +31,11 @@ class Hospital(models.Model):
     address = models.TextField()
     pincode = models.CharField(max_length=6)
     website = models.CharField(max_length=100, null=True, blank=True)
-    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='my_hospitals')
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name + '(H)'
+
 
 class Medicine(models.Model):
     name = models.CharField(max_length=40)
@@ -47,13 +47,13 @@ class Medicine(models.Model):
         return self.name
 
 class Appointment(models.Model):
-    patient = models.ForeignKey('user.Patient', on_delete=models.CASCADE, related_name='my_appointments')
+    patient = models.ForeignKey('user.Patient', on_delete=models.CASCADE)
     disease = models.TextField()
     reviewed = models.BooleanField(default=False)
     status = models.BooleanField(default=False)
     complete = models.BooleanField(default=False)
-    assigned_doctor = models.ForeignKey('user.Doctor', null=True, blank=True, on_delete=models.SET_NULL, related_name='my_appointments')
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name='appointments')
+    assigned_doctor = models.ForeignKey('user.Doctor', null=True, blank=True, on_delete=models.SET_NULL)
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.patient.user.username+'\'s appointment to Dr.'+ self.hospital.name

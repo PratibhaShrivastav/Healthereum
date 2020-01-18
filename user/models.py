@@ -19,7 +19,7 @@ class Specialization(models.Model):
 
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to=user_profile_pic_path, null=True, blank=True)
     contact = models.CharField(max_length=10)
     age = models.IntegerField()
@@ -28,16 +28,16 @@ class Doctor(models.Model):
     unique_id = models.CharField(max_length=20)
     address = models.TextField()
     pincode = models.CharField(max_length=6)
-    city = models.ForeignKey('hospital.City', on_delete=models.CASCADE, related_name='doctors')
-    skills = models.ManyToManyField(Specialization, related_name='doctors')
-    hospital = models.ForeignKey('hospital.Hospital', on_delete=models.CASCADE, related_name='doctors')
+    city = models.ForeignKey('hospital.City', on_delete=models.CASCADE)
+    skills = models.ManyToManyField(Specialization)
+    hospital = models.ForeignKey('hospital.Hospital', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username + ' (D)'
 
 
 class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = models.CharField(max_length=10)
     age = models.IntegerField()
     address = models.TextField()
