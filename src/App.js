@@ -2,7 +2,6 @@ import React,{Suspense} from 'react';
 import {BrowserRouter,Route,Switch} from 'react-router-dom';
 
 import './App.css';
-import Navbar from './Components/Navbar';
 import Content from './Components/Content';
 import HospitalDashboard from './Components/Hospital/hospital-app-board';
 import EmergencySearch from './Components/Hospital/emergency-search';
