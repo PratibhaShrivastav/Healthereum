@@ -9,6 +9,7 @@ EXCLUDE_LIST = [
 	'/user/register',
 	'/user/login',
 	'/hospital/',
+	'add_record/',
 ]
 
 def authentication_middleware(get_response):

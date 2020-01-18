@@ -131,6 +131,7 @@ class AddMedicalRecordView(APIView):
 		gender = request.data["gender"]
 		disease = request.data["disease"]
 		medicines = request.data["medicines"]
+		
 
 		"""
 		Blockchain on duty
@@ -154,4 +155,6 @@ class AddMedicalRecordView(APIView):
 		print("Fetching Data ...")
 		Data = RecordInstance.functions.showData(int(block_id)).call()
 		print(Data)
+
+		return Response({"message":"Done"}, status.HTTP_201_CREATED)
 

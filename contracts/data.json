@@ -16,26 +16,11 @@
             "type": "function"
         },
         {
-            "constant": true,
-            "inputs": [],
-            "name": "recordCount",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
             "constant": false,
             "inputs": [
                 {
                     "internalType": "string",
-                    "name": "hospname",
+                    "name": "hospitalname",
                     "type": "string"
                 },
                 {
@@ -49,14 +34,14 @@
                     "type": "string"
                 },
                 {
-                    "internalType": "address",
+                    "internalType": "string",
                     "name": "addresss",
-                    "type": "address"
+                    "type": "string"
                 },
                 {
-                    "internalType": "uint256",
+                    "internalType": "string",
                     "name": "date",
-                    "type": "uint256"
+                    "type": "string"
                 },
                 {
                     "internalType": "string",
@@ -64,9 +49,9 @@
                     "type": "string"
                 },
                 {
-                    "internalType": "int256",
+                    "internalType": "string",
                     "name": "age",
-                    "type": "int256"
+                    "type": "string"
                 },
                 {
                     "internalType": "string",
@@ -79,9 +64,9 @@
                     "type": "string"
                 },
                 {
-                    "internalType": "string[]",
+                    "internalType": "string",
                     "name": "medicines",
-                    "type": "string[]"
+                    "type": "string"
                 }
             ],
             "name": "addData",
@@ -94,6 +79,21 @@
             ],
             "payable": false,
             "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "recordCount",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
             "type": "function"
         },
         {
@@ -123,24 +123,14 @@
                     "type": "string"
                 },
                 {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                },
-                {
                     "internalType": "string",
                     "name": "",
                     "type": "string"
                 },
                 {
-                    "internalType": "int256",
+                    "internalType": "string",
                     "name": "",
-                    "type": "int256"
+                    "type": "string"
                 },
                 {
                     "internalType": "string",
@@ -153,9 +143,19 @@
                     "type": "string"
                 },
                 {
-                    "internalType": "string[]",
+                    "internalType": "string",
                     "name": "",
-                    "type": "string[]"
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
                 }
             ],
             "payable": false,
@@ -169,5 +169,5 @@
             "type": "constructor"
         }
     ],
-    "contract_address": "0x5048000b140eFCf7D8F6b21eca6766E2C0A9e5F9"
+    "contract_address": "0xcc8b1d27a2623DC18960D11C54a888f296D1c8c6"
 }

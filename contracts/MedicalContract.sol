@@ -8,13 +8,13 @@ contract PatientRecords{
         string hospitalname;
         string doctorname;
         string doctorspeciality;
-        address addresss;
-        uint date;
+        string addresss;
+        string date;
         string patientname;
-        int age;
+        string age;
         string sex;
         string disease;
-        string[] medicines;
+        string medicines;
     }
 
     mapping(uint => Record) Records;
@@ -24,19 +24,19 @@ contract PatientRecords{
     constructor() public {
         totalRecords = 0;
     }
-    function addData(string memory hospname,
+    function addData(string memory hospitalname,
                      string memory doctname,
                      string memory doctspecial,
-                     address addresss,
-                     uint date,
+                     string memory addresss,
+                     string memory date,
                      string memory patname,
-                     int age,
+                     string memory age,
                      string memory sex,
                      string memory disease,
-                     string[] memory medicines
+                     string memory medicines
                      )public returns (uint){
         totalRecords++;
-        Record memory Singlerecord = Record(totalRecords, hospname, doctname, doctspecial, addresss, date,
+        Record memory Singlerecord = Record(totalRecords, hospitalname, doctname, doctspecial, addresss, date,
         patname, age, sex, disease, medicines);
         Records[totalRecords] = Singlerecord;
         return totalRecords;
@@ -46,8 +46,8 @@ contract PatientRecords{
         return totalRecords;
     }
 
-    function showData(uint id) public view returns (string memory , string memory , string memory,address,
-    uint, string memory, int, string memory, string memory, string[] memory) {
+    function showData(uint id) public view returns (string memory , string memory , string memory,string memory,
+    string memory, string memory, string memory, string memory, string memory, string memory) {
         Record memory SingleRecord = Records[id];
         return (SingleRecord.hospitalname,
                 SingleRecord.doctorname,
