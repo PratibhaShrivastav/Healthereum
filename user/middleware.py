@@ -20,7 +20,8 @@ def authentication_middleware(get_response):
 
 	def middleware(request):
 		""" middleware function for user authentication"""
-
+		print('Token: ',request.META.get('HTTP_AUTHORIZATION'),'xxx')
+		
 		if request.path.startswith('/admin/'):
 			return get_response(request)
 
@@ -31,9 +32,12 @@ def authentication_middleware(get_response):
 					status = status.HTTP_400_BAD_REQUEST
 				)
 			
-			token = sub('Token ', '', request.META.get(
-				'HTTP_AUTHORIZATION', None))
-			
+			try:
+				token = sub('Token ', '', request.META.get(
+					'HTTP_AUTHORIZATION', 'xxx'))
+			except:
+				return Response("This token was recieved:", token)
+
 			token_obj = Token.objects.filter(key=token).first()
 
 			if not token_obj:

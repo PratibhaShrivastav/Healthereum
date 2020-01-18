@@ -25,7 +25,7 @@ class Doctor(models.Model):
     age = models.IntegerField()
     gender = models.CharField(choices=GENDER, max_length=1)
     email = models.CharField(max_length=20, blank=True, null=False)
-    unique_id = models.CharField(max_length=20)
+    unique_id = models.CharField(unique=True, max_length=20)
     address = models.TextField()
     pincode = models.CharField(max_length=6)
     city = models.ForeignKey('hospital.City', on_delete=models.CASCADE)
@@ -43,7 +43,7 @@ class Patient(models.Model):
     address = models.TextField()
     pincode = models.CharField(max_length=6)
     city = models.ForeignKey('hospital.City', on_delete=models.CASCADE)
-    unique_id = models.CharField(max_length=20)
+    unique_id = models.CharField(unique=True, max_length=20)
     
     def __str__(self):
         return self.user.username + ' (P)'

@@ -23,6 +23,7 @@ class HospitalView(APIView):
         
         unique_id = request.data.get("unique_id")
         user = request.healthy_user
+        name = request.data.get("name")
         bio = request.data.get("bio", None)
         email = request.data.get("email", None)
         contact = request.data.get("contact")
@@ -31,23 +32,24 @@ class HospitalView(APIView):
         pincode = request.data.get("pincode")
         website = request.data.get("website", None)
         city = request.data.get("city")
-        
-        city_obj = hospital_model.City.objects.get(city=city)
+        state = request.data.get("state")
+
+        state, created = hospital_model.State.objects.get_or_create(state=state)
+        city_obj, created = hospital_model.City.objects.get_or_create(city=city, state=state)
 
         hospital = hospital_model.Hospital.objects.create(unique_id=unique_id, user=user, bio=bio, email=email, contact=contact,
                 fax_number=fax_number, address=address, pincode=pincode, website=website, city=city_obj)
         
         hospital = hospital_serializers.HospitalSerializer(hospital)
 
-
         return Response(hospital.data)
 
     def get(self, request, format=None):
-        hospital = hospital_model.Hospital.objects.get(id=1)
+
+        hospital = hospital_model.Hospital.objects.get(user=request.healthy_user)
         hospital = hospital_serializers.HospitalSerializer(hospital)
-        print(hospital.data)
         
-        return Response("Done")
+        return Response(hospital.data)
 
 
 class Appointments(APIView):
@@ -59,7 +61,7 @@ class Appointments(APIView):
         """
         Get List of all pending appointments
         """
-        hospital = request.healthy_user
+        hospital = hospital_model.Hospital.objects.get(user=request.healthy_user)
         appointments = hospital_model.Appointment.objects.filter(hospital=hospital, reviewed=False)
         appointments = hospital_serializers.AppointmentSerializer(appointments, many=True)
         
@@ -76,14 +78,21 @@ class Appointments(APIView):
 
         if 'id' in request.data:
             object_id = request.data.pop('id')
-
+        else:
+            return Response("Please mention the appointment ID")
+        
         if 'status' in request.data:
             new_status = request.data.pop('status')
+        else:
+            return Response("No status change detected!")
 
         if 'assigned_doctor' in request.data and new_status:
             doctor = user_models.Doctor.objects.get(id=request.data.pop('assigned_doctor'))
         else:
-            doctor = None
+            if new_status:
+                return Response("Please select a doctor!")
+            else:
+                doctor = None
         
         if 'completed' in request.data and new_status:
             complete = request.data.pop('completed')
