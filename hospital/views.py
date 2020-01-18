@@ -5,7 +5,17 @@ from rest_framework import status
 from .models import Hospital, Medicine, Appointment
 from user.models import Patient, Doctor
 from . import serializers
+from django.db.models import Q
 
+
+class HospitalView(APIView):
+
+	def post(self,request,format=None):
+		search_text = request.data["search_text"]
+		hospital = Hospital.objects.filter(Q(name__icontains = search_text) | Q(city__city__icontains = search_text))
+		hospital = serializers.HospitalSerializer(hospital,many=True)
+
+		return Response(hospital.data, status.HTTP_200_OK)
 
 class Appointments(APIView):
     """
@@ -58,30 +68,30 @@ class Appointments(APIView):
         return Response(appointment.data, status.HTTP_200_OK)
 
 
-    # def post(self, request, format=None):
-    #     """
-    #     Create appointments
-    #     """
+    def post(self, request, format=None):
+        """
+        Create appointments
+        """
 
-    #     if 'hospital' in request.data:
-    #         hospital = request.data['hospital']
-    #     else:
-    #         return Response({'detail':'Hospital Name required.'},
-    #                              status.HTTP_400_BAD_REQUEST)
+        if 'hospital' in request.data:
+            hospital = request.data['hospital']
+        else:
+            return Response({'detail':'Hospital Name required.'},
+                                 status.HTTP_400_BAD_REQUEST)
 
-    #     if 'disease' in request.data:
-    #         disease = request.data
-    #     else:
-    #         disease = 'N/A'
+        if 'disease' in request.data:
+            disease = request.data
+        else:
+            disease = 'N/A'
         
-    #     hospital = Hospital.objects.get(id=hospital)
+        hospital = Hospital.objects.get(id=hospital)
 
-    #     try:
-    #         appointment = Appointment.objects.create(patient=request.user, hospital=hospital, disease=disease)
-    #     except:
-    #         return Response({'detail':'There was some error creating appointment or the appointment already exists'},
-    #                              status.HTTP_503_SERVICE_UNAVAILABLE)
+        try:
+            appointment = Appointment.objects.create(patient=request.healthy_user, hospital=hospital, disease=disease)
+        except:
+            return Response({'detail':'There was some error creating appointment or the appointment already exists'},
+                                 status.HTTP_503_SERVICE_UNAVAILABLE)
         
-    #     appointment = serializers.AppointmentSerializer(appointment)
+        appointment = serializers.AppointmentSerializer(appointment)
         
-    #     return Response(appointment.data, status.HTTP_200_OK)
+        return Response(appointment.data, status.HTTP_200_OK)

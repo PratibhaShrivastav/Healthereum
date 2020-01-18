@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Appointment
+from .models import *
 from user.serializers import *
-from user.models import Patient, Doctor
+from user.models import *
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
@@ -35,3 +35,24 @@ class AppointmentSerializer(serializers.ModelSerializer):
             instance.doctor = None
             instance.save()
         return instance
+
+class StateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = State
+        fields = '__all__'
+
+class CitySerializer(serializers.ModelSerializer):
+    state = StateSerializer()
+
+    class Meta:
+        model = City
+        fields = '__all__'
+
+
+class HospitalSerializer(serializers.ModelSerializer):
+    city  = CitySerializer()
+
+    class Meta:
+        model = Hospital
+        fields = '__all__'

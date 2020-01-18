@@ -7,7 +7,9 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import Doctor,Patient
+from hospital.models import Hospital
 from .serializers import *
+from hospital.serializers import HospitalSerializer
 
 
 class RegisterView(APIView):
@@ -71,7 +73,7 @@ class DoctorRegisterView(APIView):
 		skill_data = request.data.get("skill", None)
 		hospital_id = request.data("hospital_id", None)
 
-		hospital_obj = Hospital.objects.get(id=hopital_id)
+		hospital_obj = Hospital.objects.get(id=hospital_id)
 		city_obj = City.objects.get(city=city)
 
 		doctor = Doctor.objects.create(user = request.healthy_user, contact = contact, profile_pic = profile_pic,
@@ -102,6 +104,8 @@ class PatientRegisterView(APIView):
 		patient = Patient.objects.create(user = request.healthy_user, contact = contact, age = age,
 										address = address, pincode = pincode, city = city_obj,
 										unique_id = unique_id) 
+
+
 
 
 

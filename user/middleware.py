@@ -7,7 +7,8 @@ from re import sub
 
 EXCLUDE_LIST = [
 	'/user/register',
-	'/user/login'
+	'/user/login',
+	'/hospital/',
 ]
 
 def authentication_middleware(get_response):
