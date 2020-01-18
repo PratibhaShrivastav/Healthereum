@@ -8,7 +8,7 @@ from . import serializers
 from django.db.models import Q
 
 
-class HospitalView(APIView):
+class HospitalSearchView(APIView):
 
 	def post(self,request,format=None):
 		search_text = request.data["search_text"]
@@ -16,6 +16,31 @@ class HospitalView(APIView):
 		hospital = serializers.HospitalSerializer(hospital,many=True)
 
 		return Response(hospital.data, status.HTTP_200_OK)
+
+class HospitalView(APIView):
+
+    def post(self, request, format=None):
+        
+        unique_id = request.data.get("unique_id")
+        user = request.healthy_user
+        bio = request.data.get("bio", None)
+        email = request.data.get("email", None)
+        contact = request.data.get("contact")
+        fax_number = request.data.get("fax_number")
+        address = request.data.get("address")
+        pincode = request.data.get("pincode")
+        website = request.data.get("website", None)
+        city = request.data.get("city")
+
+        city_obj = City.objects.get(city=city)
+
+        hospital = Hospital.objects.create(unique_id=unique_id, user=user, bio=bio, email=email, contact=contact,
+                fax_number=fax_number, address=address, pincode=pincode, website=website, city=city_obj)
+        
+        hospital = HospitalSerializer(hospital)
+
+        return Response(hospital.data)
+
 
 class Appointments(APIView):
     """

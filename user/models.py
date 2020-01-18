@@ -19,7 +19,7 @@ class Specialization(models.Model):
 
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor')
     profile_pic = models.ImageField(upload_to=user_profile_pic_path, null=True, blank=True)
     contact = models.CharField(max_length=10)
     age = models.IntegerField()
@@ -28,24 +28,16 @@ class Doctor(models.Model):
     unique_id = models.CharField(max_length=20)
     address = models.TextField()
     pincode = models.CharField(max_length=6)
-    city = models.ForeignKey('hospital.City', on_delete=models.CASCADE)
-    skills = models.ManyToManyField(Specialization)
-    hospital = models.ForeignKey('hospital.Hospital', on_delete=models.CASCADE)
-    
-    # @receiver(post_save, sender=User)
-    # def create_doc_profile(sender, instance, created, **kwargs):
-    #     if kwargs['isDoc'] is True:
-    #         if created:
-    #             Profile.objects.create(user=instance)
-    #         else:
-    #             instance.profile.save()
+    city = models.ForeignKey('hospital.City', on_delete=models.CASCADE, related_name='doctors')
+    skills = models.ManyToManyField(Specialization, related_name='doctors')
+    hospital = models.ForeignKey('hospital.Hospital', on_delete=models.CASCADE, related_name='doctors')
 
     def __str__(self):
         return self.user.username + ' (D)'
 
 
 class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient')
     contact = models.CharField(max_length=10)
     age = models.IntegerField()
     address = models.TextField()
@@ -53,13 +45,5 @@ class Patient(models.Model):
     city = models.ForeignKey('hospital.City', on_delete=models.CASCADE)
     unique_id = models.CharField(max_length=20)
     
-    # @receiver(post_save, sender=User)
-    # def create_user_profile(sender, instance, created, **kwargs):
-    #     if kwargs['isDoc'] is False:    
-    #         if created:
-    #             Profile.objects.create(user=instance)
-    #         else:
-    #             instance.profile.save()
-
     def __str__(self):
         return self.user.username + ' (P)'
