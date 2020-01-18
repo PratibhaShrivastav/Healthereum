@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from .models import Patient, Doctor
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
@@ -19,12 +18,12 @@ class DoctorSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
-        model = Doctor
+        model = 'user.Doctor'
         fields = '__all__'
 
 class PatientSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
-        model = Patient
+        model = 'user.Patient'
         fields = '__all__'

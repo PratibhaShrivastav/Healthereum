@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .serializers import *
 
 
 def hospital_profile_pic_path(instance, filename):
@@ -22,7 +23,8 @@ class City(models.Model):
 class Hospital(models.Model):
     unique_id = models.CharField(max_length=50, unique=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='hospital')
-    bio = models.TextField()
+    name = models.CharField(max_length=50)
+    bio = models.TextField(null=True, blank=True)
     cover_pic = models.ImageField(upload_to=hospital_profile_pic_path, null=True, blank=True)
     email = models.CharField(max_length=50, blank=True, null=True)
     contact = models.CharField(max_length=10)
@@ -33,7 +35,7 @@ class Hospital(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='my_hospitals')
 
     def __str__(self):
-        return self.user.username + '(H)'
+        return self.name + '(H)'
 
 class Medicine(models.Model):
     name = models.CharField(max_length=40)

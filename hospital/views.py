@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Hospital, Medicine, Appointment
+from .models import *
 from user.models import Patient, Doctor
 from . import serializers
 from django.db.models import Q
@@ -17,29 +17,41 @@ class HospitalSearchView(APIView):
 
 		return Response(hospital.data, status.HTTP_200_OK)
 
-class HospitalView(APIView):
+# class HospitalView(APIView):
 
-    def post(self, request, format=None):
+#     def post(self, request, format=None):
         
-        unique_id = request.data.get("unique_id")
-        user = request.healthy_user
-        bio = request.data.get("bio", None)
-        email = request.data.get("email", None)
-        contact = request.data.get("contact")
-        fax_number = request.data.get("fax_number")
-        address = request.data.get("address")
-        pincode = request.data.get("pincode")
-        website = request.data.get("website", None)
-        city = request.data.get("city")
-
-        city_obj = City.objects.get(city=city)
-
-        hospital = Hospital.objects.create(unique_id=unique_id, user=user, bio=bio, email=email, contact=contact,
-                fax_number=fax_number, address=address, pincode=pincode, website=website, city=city_obj)
+#         unique_id = request.data.get("unique_id")
+#         user = request.healthy_user
+#         bio = request.data.get("bio", None)
+#         email = request.data.get("email", None)
+#         contact = request.data.get("contact")
+#         fax_number = request.data.get("fax_number", None)
+#         address = request.data.get("address")
+#         pincode = request.data.get("pincode")
+#         website = request.data.get("website", None)
+#         city = request.data.get("city")
         
-        hospital = HospitalSerializer(hospital)
+#         city_obj = City.objects.get(city=city)
 
-        return Response(hospital.data)
+#         hospital = Hospital.objects.create(unique_id=unique_id, user=user, bio=bio, email=email, contact=contact,
+#                 fax_number=fax_number, address=address, pincode=pincode, website=website, city=city_obj)
+        
+#         hospital = HospitalSerializer(hospital)
+
+
+#         return Response(hospital.data)
+
+#     def get(self, request, format=None):
+
+#         hospital = Hospital.objects.get(id=1)
+#         # hospital = request.healthy_user.hospital
+#         print(hospital)
+#         # print("\n\n\n\n\n")
+#         hospital = HospitalSerializer(hospital)
+#         print(hospital)
+        
+#         return Response("Done")
 
 
 class Appointments(APIView):
