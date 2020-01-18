@@ -52,7 +52,7 @@ class Appointment(models.Model):
     reviewed = models.BooleanField(default=False)
     status = models.BooleanField(default=False)
     complete = models.BooleanField(default=False)
-    assigned_doctor = models.ForeignKey('user.Doctor', null=True, blank=True, on_delete=models.SET_NULL)
+    assigned_doctor = models.ForeignKey('user.Doctor', null=True, blank=True, on_delete=models.SET_NULL,related_name="my_appointments")
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     
     def __str__(self):

@@ -7,9 +7,9 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import Doctor,Patient
-from hospital.models import Hospital
-from . import serializers
-from hospital.serializers import HospitalSerializer
+from hospital.models import Hospital,Appointment
+from .serializers import *
+from hospital.serializers import HospitalSerializer,AppointmentSerializer
 
 
 class RegisterView(APIView):
@@ -31,8 +31,8 @@ class RegisterView(APIView):
 
 				token, created = Token.objects.get_or_create(user=user)
 
-				userData = serializers.UserSerializer(user)
-				tokenData = serializers.TokenSerializer(token)
+				userData = UserSerializer(user)
+				tokenData = TokenSerializer(token)
 
 				return Response({"user":userData.data,"token":tokenData.data}, status=status.HTTP_200_OK)
 			except:
@@ -54,7 +54,7 @@ class LoginView(APIView):
 		user = authenticate(username=username,password=password)
 
 		token, created = Token.objects.get_or_create(user=user)
-		tokenData = serializers.TokenSerializer(token)
+		tokenData = TokenSerializer(token)
 
 		return Response(tokenData.data)
 
@@ -105,8 +105,14 @@ class PatientRegisterView(APIView):
 										address = address, pincode = pincode, city = city_obj,
 										unique_id = unique_id) 
 
+class DoctorView(APIView):
 
-
+	def get(self, request, format=None):
+		user = request.healthy_user
+		doctor_details = DoctorSerializer(user.doctor)
+		appointments = user.doctor.my_appointments.all()
+		appointments = AppointmentSerializer(appointments, many=True)
+		return Response({"doctor_details":doctor_details.data, "appointments":appointments.data}, status.HTTP_200_OK)
 
 
 

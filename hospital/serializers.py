@@ -4,11 +4,12 @@ from . import models as hospital_models
 
 class AppointmentSerializer(serializers.ModelSerializer):
     patient = user_serializers.PatientSerializer()
-    assigned_doctor = user_serializers.DoctorSerializer()
+    # assigned_doctor = user_serializers.DoctorSerializer()
 
     class Meta:
         model = hospital_models.Appointment
-        fields = '__all__'
+        exclude = ('assigned_doctor', )
+        depth = 2
 
 class StateSerializer(serializers.ModelSerializer):
 
