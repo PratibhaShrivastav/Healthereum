@@ -10,6 +10,9 @@ from .models import Doctor,Patient
 from hospital.models import Hospital,Appointment
 from .serializers import *
 from hospital.serializers import HospitalSerializer,AppointmentSerializer
+from web3 import Web3
+import io
+import json
 
 
 class RegisterView(APIView):
@@ -114,5 +117,41 @@ class DoctorView(APIView):
 		appointments = AppointmentSerializer(appointments, many=True)
 		return Response({"doctor_details":doctor_details.data, "appointments":appointments.data}, status.HTTP_200_OK)
 
+class AddMedicalRecordView(APIView):
 
+	def post(self, request, formt=None):
+
+		hospname =  request.data["hospname"]
+		docname = request.data["docname"]
+		docspeciality = request.data["docspeciality"]
+		address = request.data["address"]
+		date = request.data["date"]
+		patname = request.data["patname"]
+		age = request.data["age"]
+		gender = request.data["gender"]
+		disease = request.data["disease"]
+		medicines = request.data["medicines"]
+
+		"""
+		Blockchain on duty
+		"""
+		w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))       #Creating Instance of web3 object
+		with open("contracts/data.json", 'r') as f:
+			datastore = json.load(f)
+			abi = datastore["abi"]
+			contract_address = datastore["contract_address"]
+
+		w3.eth.defaultAccount = w3.eth.accounts[1]                      #Selecting an account with which trancsactions would happen
+		RecordInstance = w3.eth.contract(address=contract_address, abi=abi)   #Getting the instance of deployed contract using ABI and address 
+
+		#Saving data to Blockchain
+		RecordInstance.functions.addData(hospname, docname , docspeciality, address,
+		date, patname, age, gender, disease, medicines).transact()
+		block_id = RecordInstance.functions.recordCount().call()
+
+		print("Data stored in Blockchain successfully, id = ", block_id)
+		
+		print("Fetching Data ...")
+		Data = RecordInstance.functions.showData(int(block_id)).call()
+		print(Data)
 

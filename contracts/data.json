@@ -1,0 +1,173 @@
+{
+    "abi": [
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "totalRecords",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "recordCount",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "hospname",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "doctname",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "doctspecial",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "addresss",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "date",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "patname",
+                    "type": "string"
+                },
+                {
+                    "internalType": "int256",
+                    "name": "age",
+                    "type": "int256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "sex",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "disease",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string[]",
+                    "name": "medicines",
+                    "type": "string[]"
+                }
+            ],
+            "name": "addData",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "id",
+                    "type": "uint256"
+                }
+            ],
+            "name": "showData",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "int256",
+                    "name": "",
+                    "type": "int256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string[]",
+                    "name": "",
+                    "type": "string[]"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        }
+    ],
+    "contract_address": "0x5048000b140eFCf7D8F6b21eca6766E2C0A9e5F9"
+}
