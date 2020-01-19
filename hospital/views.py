@@ -10,6 +10,27 @@ from django.db.models import Q
 import pdb
 
 
+class PatientSearchView(APIView):
+
+    def post(self, request, format=None):
+        """
+        Search Results of emergency users
+        """
+        hospital = hospital_models.Hospital.objects.filter(user=request.healthy_user)
+        
+        if hospital.count()>0:
+            search_text = request.data["unique_id"]
+            patient = user_models.Patient.objects.filter(unique_id=search_text)
+            
+            if patient.count() == 0:
+                return Response("No users with this id")
+        
+            patient = user_serializers.PatientSerializer(patient[0])
+            return Response(patient.data)
+        else:
+            return Response("Not Authorized to perform this action.")
+
+
 class HospitalSearchView(APIView):
 	
     def post(self,request,format=None):
@@ -22,20 +43,6 @@ class HospitalSearchView(APIView):
 
         return Response(hospital.data, status.HTTP_200_OK)
 
-    def get(self, request, format=None):
-        """
-        Search Results of emergency users
-        """
-        hospital = hospital_models.Hospital.objects.filter(user=request.healthy_user)
-        
-        if hospital.count()>0:
-            search_text = request.data["unique_id"]
-            patient = user_models.Patient.objects.get(unique_id=search_text)
-            patient = user_serializers.PatientSerializer(patient)
-
-            return Response(patient.data)
-        else:
-            return Response("Not Authorized to perform this action.")
 
 class HospitalView(APIView):
 

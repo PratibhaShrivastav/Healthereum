@@ -168,6 +168,16 @@ class PatientRegisterView(APIView):
 
 		return Response({"token":token.data,"details":patient.data})
 
+class DoctorDetailView(APIView):
+
+	def get(self, request, format=None):
+		user = request.healthy_user
+		doctor = user_models.Doctor.objects.get(user=user)
+		appointments = hospital_models.Appointment.objects.filter(assigned_doctor=doctor)
+		appointments = hospital_serializers.AppointmentSerializer(appointments, many=True)
+		return Response(appointments.data)
+
+
 class DoctorView(APIView):
 
 	def get(self, request, format=None):
