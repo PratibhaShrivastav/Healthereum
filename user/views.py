@@ -11,6 +11,8 @@ from hospital import models as hospital_models
 from .serializers import *
 from hospital import serializers as hospital_serializers
 from user import serializers as user_serializers
+import datetime
+from utils import add_data_block, show_data
 
 
 class RegisterView(APIView):
@@ -127,6 +129,16 @@ class DoctorRegisterView(APIView):
 			'doctor':doctor.data
 		}, status=status.HTTP_200_OK)
 
+	def get(self, request, format=None):
+		"""
+		Returns Doctor's profile
+		"""
+		user = request.healthy_user
+		doctor = user_models.Doctor.objects.get(user=user)
+		doctor = user_serializers.DoctorSerializer(doctor)
+
+		return Response(doctor.data)
+
 
 class PatientRegisterView(APIView):
 
@@ -145,12 +157,9 @@ class PatientRegisterView(APIView):
 			state_obj = hospital_models.State.objects.create(state=state)
 			city_obj = hospital_models.City.objects.create(city=city, state=state_obj)
 		
-		try:
-			patient = user_models.Patient.objects.create(user = request.healthy_user, contact = contact, age = age,
-											address = address, pincode = pincode, city = city_obj,
-											unique_id = unique_id) 
-		except:
-			return Response("Error creating your profile!")
+		patient = user_models.Patient.objects.create(user = request.healthy_user, contact = contact, age = age,
+										address = address, pincode = pincode, city = city_obj,
+										unique_id = unique_id) 
 
 		token = Token.objects.get(user=request.healthy_user)
 		token = TokenSerializer(token)
@@ -170,5 +179,88 @@ class DoctorView(APIView):
 		# appointments = hospital_serializers.AppointmentSerializer(appointments, many=True)
 		return Response(doctor_details.data, status.HTTP_200_OK)
 
+class PatientView(APIView):
+
+	def get(self, request, format=None):
+		"""
+		Get all appointments of a patient
+		"""
+		user = request.healthy_user
+		patient = user_models.Patient.objects.get(user=user)
+		pending_appointments = hospital_models.Appointment.objects.filter(patient=patient, complete=True)
+		completed_appointments = hospital_models.Appointment.objects.filter(patient=patient, complete=False)
+		
+		pending_appointments = hospital_serializers.AppointmentSerializer(pending_appointments, many=True)
+		completed_appointments = hospital_serializers.AppointmentSerializer(completed_appointments, many=True)
+
+		return Response({
+			"pending":pending_appointments.data,
+			"completed":completed_appointments.data
+			})
 
 
+class RecordView(APIView):
+	
+	def get(self, request, format=None):
+
+		patient_id = request.data.get("patient_id")
+		patient = user_models.Patient.objects.get(id=patient_id)
+		blocks = user_models.Block.objects.filter(patient=patient)
+
+		res = []
+
+		for block in blocks:
+			res.append(show_data(block.id))
+
+		return Response(res)
+
+	def post(self, request, format=None):
+
+		patient_id = request.data.get("patient_id")
+		appointment_id = request.data.get("appointment_id")
+		medicines = request.data.get("medicines")
+		appointment = hospital_models.Appointment.objects.get(id=appointment_id)
+		patient = user_models.Patient.objects.get(id=patient_id)
+		doctor = user_models.Doctor.objects.get(user=request.healthy_user)
+		hospital = doctor.hospital
+		now=datetime.datetime.now()
+		date = now.strftime("%Y-%m-%d")
+
+		skills_data = doctor.skills.all()
+		skills = ""
+		for skill in skills_data:
+			skills += skill.field_name
+			skills += ","
+
+		data = {
+			"hospital_name":hospital.name,
+			"doc_name":doctor.user.first_name+' '+doctor.user.last_name,
+			"doc_skill":skills,
+			"address":hospital.address,
+			"date":date,
+			"patient_name":patient.user.first_name+' '+patient.user.last_name,
+			"age":str(patient.age),
+			"gender":patient.gender,
+			"disease":appointment.disease,
+			"medicines":medicines
+		}
+		
+		data = add_data_block(data)
+	
+		data = {
+			"block_id":data[10],
+			"hospital_name":data[0],
+			"doc_name":data[1],
+			"doc_skill":data[2],
+			"address":data[3],
+			"date":data[4],
+			"patient_name":data[5],
+			"age":data[6],
+			"gender":data[7],
+			"disease":data[8],
+			"medicines":data[9]
+		}
+
+		block = user_models.Block.objects.create(number=data["block_id"],patient=patient)
+
+		return Response(data)

@@ -1,0 +1,164 @@
+{
+    "abi": [
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "hospitalname",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "doctname",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "doctspecial",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "addresss",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "date",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "patname",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "age",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "sex",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "disease",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "medicines",
+                    "type": "string"
+                }
+            ],
+            "name": "addData",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "recordCount",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "id",
+                    "type": "uint256"
+                }
+            ],
+            "name": "showData",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "totalRecords",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        }
+    ],
+    "contract_address": "0x4da931342a253E675bD9183D9B3db4F56066268E"
+}

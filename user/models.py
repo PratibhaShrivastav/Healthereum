@@ -17,7 +17,6 @@ class Specialization(models.Model):
     def __str__(self):
         return self.field_name
 
-
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to=user_profile_pic_path, null=True, blank=True)
@@ -40,6 +39,7 @@ class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = models.CharField(max_length=10)
     age = models.IntegerField()
+    gender = models.CharField(max_length=1, choices=GENDER)
     address = models.TextField()
     pincode = models.CharField(max_length=6)
     city = models.ForeignKey('hospital.City', on_delete=models.CASCADE)
@@ -47,3 +47,10 @@ class Patient(models.Model):
     
     def __str__(self):
         return self.user.username + ' (P)'
+
+class Block(models.Model):
+    number = models.IntegerField()
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='blocks')
+
+    def __str__(self):
+        return self.patient.user.username+' '+self.number
